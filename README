@@ -1,0 +1,35 @@
+NAME
+
+    Math::CG - Computational Geometry modules
+
+SYNOPSIS
+
+        use Math::CG::Point;
+        use Math::CG::PointSet;
+        use Math::CG::Triangle;
+
+DESCRIPTION
+
+    Started to learn 计算几何 | Computational Geometry via https://www.edx.org/
+    and this set of modules is a result of trying out and excercising what
+    I've learned so far. So really unstable for now.
+
+SEE ALSO
+
+    Math::CG::Point, Math::CG::PointSet, Math::CG::Triangle,
+
+    https://www.edx.org/course/ji-suan-ji-he-computational-geometry-tsinghu
+    ax-70240183x
+
+AUTHOR
+
+    Jozef Kutej, <jkutej at cpan.org>
+
+LICENSE AND COPYRIGHT
+
+    This program is free software; you can redistribute it and/or modify it
+    under the terms of either: the GNU General Public License as published
+    by the Free Software Foundation; or the Artistic License.
+
+    See http://dev.perl.org/licenses/ for more information.
+

@@ -1,0 +1,13 @@
+Build.PL
+Changes
+lib/Math/CG.pm
+lib/Math/CG/Point.pm
+lib/Math/CG/PointSet.pm
+lib/Math/CG/Triangle.pm
+MANIFEST			This list of files
+t/01_Point.t
+t/02_PointSet.t
+t/03_Triangle.t
+README
+META.yml
+META.json

@@ -18,6 +18,14 @@ subtest 'methods' => sub {
     my $ptset = Math::CG::PointSet->new(points => [[0, 0], [0, 1], [1, 0]]);
     is($ptset->as_string, $ptset . '',           'stringification');
     is($ptset->as_string, '[[0,0],[0,1],[1,0]]', 'stringification');
+    ok($ptset->first_point->is_equal(Math::CG::Point->new([0, 0])), 'first_point()');
+    ok($ptset->last_point->is_equal(Math::CG::Point->new([1, 0])), 'last_point()');
+    is_deeply([$ptset->as_array], [0, 0, 0, 1, 1, 0], 'as_array()');
+
+    $ptset->clone_last(1,1);
+    is_deeply([$ptset->as_array], [0, 0, 0, 1, 1, 0, 2, 1], 'clone_last()');
+    $ptset->clone_first(0,1);
+    eq_or_diff([$ptset->as_array], [0, 0, 0, 1, 1, 0, 2, 1, 0 , 1], 'clone_first()');
 };
 
 subtest 'extremes' => sub {

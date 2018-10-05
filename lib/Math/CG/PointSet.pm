@@ -48,7 +48,7 @@ around BUILDARGS => sub {
 
 sub as_string {
     my ($self) = @_;
-    return encode_json([map {$_->as_data} @{$self->points}]);
+    return encode_json([map {[$_->as_array]} @{$self->points}]);
 }
 
 sub check_edge {
@@ -108,6 +108,47 @@ sub encloses {
     else {
         croak 'TODO';
     }
+}
+
+sub as_array {
+    my ($self) = @_;
+    return map {$_->as_array} @{$self->points};
+}
+
+sub first_point {
+    my ($self) = @_;
+    die 'no points' unless @{$self->points};
+    return $self->points->[0];
+}
+
+sub last_point {
+    my ($self) = @_;
+    die 'no points' unless @{$self->points};
+    return $self->points->[-1];
+}
+
+sub append {
+    my ($self, @points) = @_;
+    push(@{$self->points}, @points);
+    return $self;
+}
+
+sub clone_first {
+    my ($self, @move) = @_;
+    die 'no points' unless @{$self->points};
+    $self->append($self->first_point->clone);
+    $self->last_point->move(@move)
+        if @move;
+    return $self->first_point;
+}
+
+sub clone_last {
+    my ($self, @move) = @_;
+    die 'no points' unless @{$self->points};
+    $self->append($self->last_point->clone);
+    $self->last_point->move(@move)
+        if @move;
+    return $self->last_point;
 }
 
 1;

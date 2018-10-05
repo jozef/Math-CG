@@ -61,9 +61,9 @@ sub as_string {
     return encode_json($self->coords);
 }
 
-sub as_data {
+sub as_array {
     my ($self) = @_;
-    return $self->coords;
+    return @{$self->coords};
 }
 
 sub left_of {
@@ -85,6 +85,30 @@ sub is_equal {
         return 0 if ($self->coords->[$idx] // 0) != ($p1->coords->[$idx] // 0);
     }
     return 1;
+}
+
+sub clone {
+    my ($self) = @_;
+    return __PACKAGE__->new(coords => [$self->as_array]);
+}
+
+sub move {
+    my ($self, @coords_delta) = @_;
+
+    if (@coords_delta == 1) {
+        my %delta = %{shift(@coords_delta)};
+        foreach my $idx (sort keys %idx_to_dim) {
+            next unless exists($delta{$idx_to_dim{$idx}});
+            push(@coords_delta, $delta{$idx_to_dim{$idx}});
+        }
+    }
+
+    my $idx = 0;
+    foreach my $delta (@coords_delta) {
+        $self->coords->[$idx] += $delta;
+        $idx++;
+    }
+    return $self;
 }
 
 1;

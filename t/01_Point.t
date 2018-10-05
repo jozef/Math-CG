@@ -36,6 +36,15 @@ subtest 'methods' => sub {
     my $p2  = Math::CG::Point->new(x => 0, y => -1);
     ok(!$pt0->left_of($p1, $p2), 'left_of()');
     ok($pt0->left_of($p2, $p1), 'left_of()');
+
+    my $p3 = $p1->clone();
+    ok($p3->is_equal($p1),  'is_equal()');
+    ok(!$p3->is_equal($p2), 'is_equal()');
+
+    my $p4 = $pt0->clone()->move(0.5, 0)->move(0.5, 0);
+    ok($p4->is_equal($p1), 'move()');
+    $p4->move({x => -1, y => -1});
+    ok($p4->is_equal($p2), 'move()');
 };
 
 done_testing;

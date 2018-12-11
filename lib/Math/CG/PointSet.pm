@@ -192,11 +192,11 @@ sub hull { return $_[0]->hull_graham_scan() }
 sub hull_graham_scan {
     my ($self) = @_;
     $self->sort;
-    my @t_points      = @{$self->points};
+    my @t_points = @{$self->points};
     my @s_points = splice(@t_points, 0, 3);
 
     while (@t_points) {
-        if ($t_points[0]->left_of($s_points[-2],$s_points[-1])) {
+        if ($t_points[0]->left_of($s_points[-2], $s_points[-1])) {
             push(@s_points, shift(@t_points));
         }
         else {

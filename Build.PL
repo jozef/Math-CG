@@ -15,7 +15,10 @@ my $builder = Module::Build->new(
         'Class::Load' => 0,
         'List::Util'  => 0,
     },
-    build_requires => {'Test::Most' => 0,},
+    build_requires => {
+        'Test::Most' => 0,
+        'File::Basename' => 0,
+    },
     add_to_cleanup => ['Math-CG-*'],
     create_readme  => 1,
     meta_merge     => {

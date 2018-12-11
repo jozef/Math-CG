@@ -1,0 +1,172 @@
+%!PS-Adobe-3.0 EPSF-1.2
+%%Title: (examples/02_PointSet.t-Graham-Scan.eps)
+%%LanguageLevel: 1
+%%Creator: PostScript::Simple perl module version 0.09
+%%CreationDate: Tue Dec 11 19:53:47 2018
+%%For: hg
+%%Orientation: Portrait
+%%BoundingBox: 0 0 28 28
+%%EndComments
+%%BeginProlog
+/ll 1 def systemdict /languagelevel known {
+/ll languagelevel def } if
+%%BeginResource: PostScript::Simple-circle
+/circle {newpath 0 360 arc closepath} bind def
+%%EndResource
+%%EndProlog
+%%BeginSetup
+/umm {72 mul 25.4 div} def
+%%EndSetup
+0.8 0 0 setrgbcolor
+0.01 umm setlinewidth
+/Times-Roman findfont 0.6 scalefont setfont
+0.8 0 0 setrgbcolor
+1 umm 1 umm 0.05 umm circle fill
+newpath
+1 umm 1 umm moveto
+1 umm 1 umm lineto stroke
+2 umm 1 umm 0.05 umm circle fill
+newpath
+1 umm 1 umm moveto
+2 umm 1 umm lineto stroke
+7 umm 1 umm 0.05 umm circle fill
+newpath
+1 umm 1 umm moveto
+7 umm 1 umm lineto stroke
+6 umm 2 umm 0.05 umm circle fill
+newpath
+1 umm 1 umm moveto
+6 umm 2 umm lineto stroke
+4 umm 2 umm 0.05 umm circle fill
+newpath
+1 umm 1 umm moveto
+4 umm 2 umm lineto stroke
+4 umm 3 umm 0.05 umm circle fill
+newpath
+1 umm 1 umm moveto
+4 umm 3 umm lineto stroke
+7 umm 5 umm 0.05 umm circle fill
+newpath
+1 umm 1 umm moveto
+7 umm 5 umm lineto stroke
+2 umm 2 umm 0.05 umm circle fill
+newpath
+1 umm 1 umm moveto
+2 umm 2 umm lineto stroke
+3 umm 3 umm 0.05 umm circle fill
+newpath
+1 umm 1 umm moveto
+3 umm 3 umm lineto stroke
+5 umm 6 umm 0.05 umm circle fill
+newpath
+1 umm 1 umm moveto
+5 umm 6 umm lineto stroke
+3 umm 4 umm 0.05 umm circle fill
+newpath
+1 umm 1 umm moveto
+3 umm 4 umm lineto stroke
+2 umm 5 umm 0.05 umm circle fill
+newpath
+1 umm 1 umm moveto
+2 umm 5 umm lineto stroke
+1 umm 2 umm 0.05 umm circle fill
+newpath
+1 umm 1 umm moveto
+1 umm 2 umm lineto stroke
+1 umm 3 umm 0.05 umm circle fill
+newpath
+1 umm 1 umm moveto
+1 umm 3 umm lineto stroke
+0 umm 3 umm 0.05 umm circle fill
+newpath
+1 umm 1 umm moveto
+0 umm 3 umm lineto stroke
+0 umm 2 umm 0.05 umm circle fill
+newpath
+1 umm 1 umm moveto
+0 umm 2 umm lineto stroke
+0 0 0.8 setrgbcolor
+newpath
+1 umm 1 umm moveto
+2 umm 1 umm lineto 7 umm 1 umm lineto 7 umm 5 umm lineto 5 umm 6 umm lineto 2 umm 5 umm lineto 0 umm 3 umm lineto 0 umm 2 umm lineto 1 umm 1 umm lineto stroke
+0 0 0 setrgbcolor
+1 umm 1 umm 0.02 umm circle fill
+newpath
+1.04 umm 1.04 umm moveto
+(1 [1,1])   show stroke 
+0 0 0 setrgbcolor
+2 umm 1 umm 0.02 umm circle fill
+newpath
+2.04 umm 1.04 umm moveto
+(2 [2,1])   show stroke 
+0 0 0 setrgbcolor
+7 umm 1 umm 0.02 umm circle fill
+newpath
+7.04 umm 1.04 umm moveto
+(3 [7,1])   show stroke 
+0 0 0 setrgbcolor
+6 umm 2 umm 0.02 umm circle fill
+newpath
+6.04 umm 2.04 umm moveto
+(4 [6,2])   show stroke 
+0 0 0 setrgbcolor
+4 umm 2 umm 0.02 umm circle fill
+newpath
+4.04 umm 2.04 umm moveto
+(5 [4,2])   show stroke 
+0 0 0 setrgbcolor
+4 umm 3 umm 0.02 umm circle fill
+newpath
+4.04 umm 3.04 umm moveto
+(6 [4,3])   show stroke 
+0 0 0 setrgbcolor
+7 umm 5 umm 0.02 umm circle fill
+newpath
+7.04 umm 5.04 umm moveto
+(7 [7,5])   show stroke 
+0 0 0 setrgbcolor
+2 umm 2 umm 0.02 umm circle fill
+newpath
+2.04 umm 2.04 umm moveto
+(8 [2,2])   show stroke 
+0 0 0 setrgbcolor
+3 umm 3 umm 0.02 umm circle fill
+newpath
+3.04 umm 3.04 umm moveto
+(9 [3,3])   show stroke 
+0 0 0 setrgbcolor
+5 umm 6 umm 0.02 umm circle fill
+newpath
+5.04 umm 6.04 umm moveto
+(10 [5,6])   show stroke 
+0 0 0 setrgbcolor
+3 umm 4 umm 0.02 umm circle fill
+newpath
+3.04 umm 4.04 umm moveto
+(11 [3,4])   show stroke 
+0 0 0 setrgbcolor
+2 umm 5 umm 0.02 umm circle fill
+newpath
+2.04 umm 5.04 umm moveto
+(12 [2,5])   show stroke 
+0 0 0 setrgbcolor
+1 umm 2 umm 0.02 umm circle fill
+newpath
+1.04 umm 2.04 umm moveto
+(13 [1,2])   show stroke 
+0 0 0 setrgbcolor
+1 umm 3 umm 0.02 umm circle fill
+newpath
+1.04 umm 3.04 umm moveto
+(14 [1,3])   show stroke 
+0 0 0 setrgbcolor
+0 umm 3 umm 0.02 umm circle fill
+newpath
+0.04 umm 3.04 umm moveto
+(15 [0,3])   show stroke 
+0 0 0 setrgbcolor
+0 umm 2 umm 0.02 umm circle fill
+newpath
+0.04 umm 2.04 umm moveto
+(16 [0,2])   show stroke 
+%%EOF

@@ -151,6 +151,62 @@ sub clone_last {
     return $self->last_point;
 }
 
+sub ltl_point {
+    my ($self) = @_;
+    my $point_idx = $self->ltl_point_idx;
+    return undef unless defined $point_idx;
+    return $self->points->[$point_idx];
+}
+
+sub ltl_point_idx {
+    my ($self) = @_;
+    return undef unless $self->count;
+    my $ltl_point_idx = 0;
+    my $points = $self->points;
+    foreach my $point_idx ( 1 .. $self->count-1 ) {
+        my $cmp_y_axes = ( $points->[$point_idx]->y <=> $points->[$ltl_point_idx]->y );
+        next if $cmp_y_axes == 1;                                                       # y-axe higher
+        $ltl_point_idx = $point_idx
+            if (    ( $cmp_y_axes == -1 )                                               # y-axe lower
+                 || ( $points->[$point_idx]->x < $points->[$ltl_point_idx]->x ) );  # y-axe same, x-axe smaller
+    }
+    return $ltl_point_idx;
+}
+
+sub sort {
+    my ($self) = @_;
+    return unless $self->count;
+
+    my $ltl_point_idx = $self->ltl_point_idx;
+    my $points        = $self->points;
+    my $ltl_point     = splice( @{$points}, $ltl_point_idx, 1 );
+
+    @{$points} = sort { $a->cmp( $ltl_point, $b ) || ( $a->x <=> $b->x ) || ( $a->y <=> $b->y ) }
+        @{$points};
+    unshift( @{$points}, $ltl_point );
+    return;
+}
+
+sub hull { return $_[0]->hull_graham_scan() }
+
+sub hull_graham_scan {
+    my ($self) = @_;
+    $self->sort;
+    my @t_points      = @{$self->points};
+    my @s_points = splice(@t_points, 0, 3);
+
+    while (@t_points) {
+        if ($t_points[0]->left_of($s_points[-2],$s_points[-1])) {
+            push(@s_points, shift(@t_points));
+        }
+        else {
+            pop(@s_points);
+        }
+    }
+
+    return \@s_points;
+}
+
 1;
 
 __END__
@@ -168,6 +224,18 @@ Math::CG::PointSet - set of points
 =head2 encloses($point)
 
 Return true/false if L<Math::CG::Point> is inside the point set.
+
+=head2 sort()
+
+Sorts points by their angular relation to lowest-to-leftmost point
+
+=head2 hull()
+
+alias for hull_graham_scan().
+
+=head2 hull_graham_scan()
+
+Returns array ref of points that represent hull using Graham Scan algorithm.
 
 =head1 AUTHOR
 

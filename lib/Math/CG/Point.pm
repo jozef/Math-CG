@@ -73,6 +73,17 @@ sub left_of {
     return $triangle->area2 > 0;
 }
 
+sub cmp {
+    my ($self, $p1, $p2) = @_;
+    my $triangle = Math::CG::Triangle->new([$p1, $p2, $self]);
+    my $area2 = $triangle->area2;
+    return (
+          $area2 > 0  ? 1
+        : $area2 == 0 ? 0
+        :               -1
+    );
+}
+
 sub is_not_equal {
     my ($self, $p1) = @_;
     return !$self->is_equal($p1);

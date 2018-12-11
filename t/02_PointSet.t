@@ -1,6 +1,8 @@
 #!/usr/bin/env perl
 
 use Test::Most;
+use File::Basename qw(basename);
+
 use strict;
 use warnings;
 
@@ -42,5 +44,56 @@ subtest 'extremes' => sub {
     eq_or_diff($ptset->extremes_idx, [0, 1, 4, 5], 'extremes_idx()',);
 };
 
-done_testing;
+subtest 'Graham Scan' => sub {
+    my @sorted_point_set = (
+        [1, 1], [2, 1], [7, 1], [6, 2], [4, 2], [4, 3], [7, 5], [2, 2],
+        [3, 3], [5, 6], [3, 4], [2, 5], [1, 2], [1, 3], [0, 3], [0, 2],
+    );
+    my @hull_point_set =
+        ([1, 1], [2, 1], [7, 1], [7, 5], [5, 6], [2, 5], [0, 3], [0, 2],);
+    my @random_point_set = sort { int( rand(3) ) - 1 } @sorted_point_set;
+    my $ptset  = Math::CG::PointSet->new( points => \@random_point_set );
+    my $ptset2 = Math::CG::PointSet->new( points => \@random_point_set );
+    my @ltl_point = @{ $ptset->ltl_point->coords };
+    eq_or_diff( \@ltl_point, [ 1, 1 ], 'ltl_point()' )
+        or return diag(
+              'please check input data, without correct ltl point all other test here will fail');
 
+    $ptset->sort();
+    eq_or_diff( [ map { $_->coords } @{ $ptset->points } ], \@sorted_point_set, 'sort()' );
+    eq_or_diff( [ map { $_->coords } @{ $ptset2->hull_graham_scan } ],  \@hull_point_set,   'hull_graham_scan()' );
+
+    if ($ENV{DEBUG_FILES}) {
+        eval q{
+            use PostScript::Simple 0.06;
+            my $ps = new PostScript::Simple(
+                xsize    => 10,
+                ysize    => 10,
+                units    => "mm",
+                colour   => 1,
+                eps      => 1,
+                reencode => undef
+            );
+            $ps->setcolour("red");
+            $ps->setlinewidth( 0.01 );
+            $ps->setfont("Times-Roman", 0.6);
+            $ps->setcolour("red");
+            foreach my $point (@{$ptset->points}) {
+                $ps->circle({filled => 1}, $point->as_array, 0.05);
+                $ps->line(@ltl_point, $point->as_array);
+            }
+            $ps->setcolour("blue");
+            $ps->polygon( ( map { $_->as_array } @{ $ptset->hull } ), @ltl_point );
+            my $i = 1;
+            foreach my $point (@{$ptset->points}) {
+                $ps->setcolour("black");
+                $ps->circle({filled => 1}, $point->as_array, 0.02);
+                $ps->text((map { $_ + 0.04 } $point->as_array), sprintf("%d [%d,%d]", $i++,$point->as_array));
+            }
+            $ps->output("examples/".basename($0)."-Graham-Scan.eps");
+        };
+        die $@ if $@;
+    }
+};
+
+done_testing;

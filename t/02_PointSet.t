@@ -30,6 +30,27 @@ subtest 'methods' => sub {
     eq_or_diff([$ptset->as_array], [0, 0, 0, 1, 1, 0, 2, 1, 0 , 1], 'clone_first()');
 };
 
+subtest 'encloses()' => sub {
+    my $ptset = Math::CG::PointSet->new(points => [[0, 0], [0, 1], [1, 0]]);
+    # 3 points (similar tests in 03_Triangle.t)
+    ok($ptset->encloses(Math::CG::Point->new([0, 0])), 'encloses() edge point');
+    ok($ptset->encloses(Math::CG::Point->new([0, 1])), 'encloses() edge point');
+    ok($ptset->encloses(Math::CG::Point->new([0.5, 0.5])), 'encloses() inside point');
+    ok(!$ptset->encloses(Math::CG::Point->new([0.5, 1])), 'encloses() outside point');
+
+    # 3+ points
+    my $ptset2 =
+        Math::CG::PointSet->new(points => [[2, 2], [0, 0], [2, 0], [0, 2]]);
+    ok($ptset2->encloses(Math::CG::Point->new([1, 1])), 'encloses() inside point that sits on triangle edge');
+    ok($ptset2->encloses(Math::CG::Point->new([1, 2])), 'encloses() inside point that sits on triangle edge');
+    ok(!$ptset2->encloses(Math::CG::Point->new([1, 2.1])), 'encloses() outside point');
+
+    my $ptset3 =
+        Math::CG::PointSet->new(points => [[2, 2], [0, 0], [1, 3], [2, 0], [3, 1], [0, 2]]);
+    ok($ptset3->encloses(Math::CG::Point->new([0.5, 2])), 'encloses() inside point');
+    ok(!$ptset3->encloses(Math::CG::Point->new([2.5, 1])), 'encloses() outside point');
+};
+
 subtest 'extremes' => sub {
     my $ptset = Math::CG::PointSet->new(points => [[1, 1], [1, 5], [2, 3], [3, 2], [4, 4], [5, 0]]);
     ok($ptset->check_edge(0, 1), 'check_edge()');

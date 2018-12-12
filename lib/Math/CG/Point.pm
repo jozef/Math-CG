@@ -4,7 +4,7 @@ use Moose;
 use Carp qw(croak);
 use JSON::XS qw(encode_json);
 use Class::Load qw(load_class);
-use List::Util qw(max);
+use List::Util qw(min max);
 
 has 'coords' => (is => 'rw', isa => 'ArrayRef', default => sub {[]}, lazy => 1);
 
@@ -75,6 +75,7 @@ sub left_of {
 
 sub cmp {
     my ($self, $p1, $p2) = @_;
+    load_class('Math::CG::Triangle');
     my $triangle = Math::CG::Triangle->new([$p1, $p2, $self]);
     my $area2 = $triangle->area2;
     return (
@@ -82,6 +83,32 @@ sub cmp {
         : $area2 == 0 ? 0
         :               -1
     );
+}
+
+sub between {
+    my ($self, $p1, $p2) = @_;
+    # vertical line
+    if (($p1->x == $p2->x) || ($self->x == $p1->x) || ($self->x == $p2->x)) {
+        return 0 if (($self->x != $p2->x) && ($self->y != $p1->y));
+        return (($self->y >= $p1->y) && ($self->y <= $p2->y))
+            || (($self->y >= $p2->y) && ($self->y <= $p1->y));
+    }
+    # horizontal line
+    if (($p1->y == $p2->y) || ($self->y == $p1->y) || ($self->y == $p2->y)) {
+        return 0 if (($self->y != $p2->y) && ($self->x != $p1->x));
+        return ($self->x >= $p1->x && $self->x <= $p2->x)
+            || ($self->x >= $p2->x && $self->x <= $p1->x);
+    }
+    # straight line
+    return 0 if ($p1->x - $p2->x)*($self->y - $p1->y) != ($p1->y - $p2->y)*($self->x - $p1->x);
+    # outside straight line
+    return 0 if
+        ($self->y == min($self->y, $p1->y, $p2->y))
+        || ($self->y == max($self->y, $p1->y, $p2->y))
+        || ($self->x == min($self->x, $p1->x, $p2->x))
+        || ($self->x == max($self->x, $p1->x, $p2->x))
+        ;
+    return 1;
 }
 
 sub is_not_equal {

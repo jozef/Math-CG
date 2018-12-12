@@ -45,6 +45,40 @@ subtest 'methods' => sub {
     ok($p4->is_equal($p1), 'move()');
     $p4->move({x => -1, y => -1});
     ok($p4->is_equal($p2), 'move()');
+
+    # between
+    my @between_tests = (
+        {ok => 1, p => [0,  0],  a => [-1, 0],  b => [1, 0]},    # horizontal line
+        {ok => 1, p => [0,  0],  a => [0,  -1], b => [0, 1]},    # vertical line
+        {ok => 1, p => [0,  0],  a => [0,  0],  b => [0, 1]},    # same point
+        {ok => 1, p => [1,  1],  a => [1,  1],  b => [3, 3]},    # same point
+        {ok => 1, p => [1,  1],  a => [1,  1],  b => [1, 1]},    # same point
+        {ok => 1, p => [2,  2],  a => [1,  1],  b => [3, 3]},    # on 45° line
+        {ok => 1, p => [2,  2],  a => [1,  3],  b => [3, 1]},    # on -45° line
+        {ok => 0, p => [-2, 0],  a => [-1, 0],  b => [1, 0]},    # outside horizontal line
+        {ok => 0, p => [0,  -2], a => [0,  -1], b => [0, 1]},    # outside vertical line
+        {ok => 0, p => [0,  0],  a => [1,  1],  b => [3, 3]},    # outside 45° line
+        {ok => 0, p => [4,  0],  a => [1,  3],  b => [3, 1]},    # outside -45° line
+    );
+    foreach my $btest (@between_tests) {
+        map {$btest->{$_} = Math::CG::Point->new($btest->{$_})} qw(p a b);
+        is( !!$btest->{p}->between($btest->{a}, $btest->{b}),
+            !!$btest->{ok},
+            ($btest->{ok} ? '' : 'not ')
+                . $btest->{p}
+                . '->between('
+                . $btest->{a} . ','
+                . $btest->{b} . ')'
+        );
+        is( !!$btest->{p}->between($btest->{b}, $btest->{a}),
+            !!$btest->{ok},
+            ($btest->{ok} ? '' : 'not ')
+                . $btest->{p}
+                . '->between('
+                . $btest->{b} . ','
+                . $btest->{a} . ')'
+        )
+    }
 };
 
 done_testing;

@@ -94,11 +94,11 @@ sub encloses {
         my $to_left_sum = 0;
         foreach my $tp1_idx (0 .. 2) {
             my $tp2_idx = ($tp1_idx == 2 ? 0 : $tp1_idx + 1);
-            $to_left_sum += (
-                $point->left_of($self->points->[$tp1_idx], $self->points->[$tp2_idx])
-                ? 1
-                : -1
-            );
+            my $cmp_val = $point->cmp($self->points->[$tp1_idx], $self->points->[$tp2_idx]);
+            if ($cmp_val == 0) { # is on the triangle edge straight line
+                return $point->between($self->points->[$tp1_idx], $self->points->[$tp2_idx])
+            }
+            $to_left_sum += $cmp_val;
             return 0 if ($to_left_sum == 0);    # early exit after two iterations
         }
 
@@ -106,7 +106,24 @@ sub encloses {
         return abs($to_left_sum) == 3;
     }
     else {
-        croak 'TODO';
+        # divide and conquer algorithm to find possible triangle where a point can be enclosed
+        my $hull        = $self->hull;
+        my $first_point = shift(@$hull);
+        while (@$hull > 2) {
+            my $middle_idx = int(scalar(@$hull) / 2);
+            my $cmp_val = $point->cmp($first_point, $hull->[$middle_idx]);
+            if ($cmp_val == 0) {
+                return $hull->[$middle_idx]->x >= $point->x;
+            }
+            elsif ($cmp_val < 0) {
+                splice(@$hull, $middle_idx, @$hull - $middle_idx);
+            }
+            else {
+                splice(@$hull, 0, $middle_idx);
+            }
+        }
+
+        return Math::CG::PointSet->new([$first_point, @$hull])->encloses($point);
     }
 }
 

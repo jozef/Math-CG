@@ -20,9 +20,9 @@ my %idx_to_dim = (
 );
 
 use overload (
-    '""' => \&as_string,
-    '==' => \&is_equal,
-    '!=' => \&is_not_equal,
+    '""' => 'as_string',
+    '==' => 'is_equal',
+    '!=' => 'is_not_equal',
 );
 
 around BUILDARGS => sub {
@@ -58,7 +58,12 @@ around BUILDARGS => sub {
 
 sub as_string {
     my ($self) = @_;
-    return encode_json($self->coords);
+    return encode_json($self->as_data);
+}
+
+sub as_data {
+    my ($self) = @_;
+    return [@{$self->coords}];
 }
 
 sub as_array {
